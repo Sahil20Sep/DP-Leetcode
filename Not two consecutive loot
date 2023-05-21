@@ -29,6 +29,9 @@ int func(int i, int arr[], vector<int> &dp){
         }
         return dp[n - 1];
         
+        
+        (also here we can take += arr[i], if( i > 1 ) { take += dp[i - 2] }
+        
    --------------------------------------------------------------------------------
    
    int FindMaxSum(int arr[], int n)
