@@ -1,0 +1,14 @@
+class Solution {
+public:
+    int minLength(string s) {
+        if(s.find("AB") != -1){
+            int found = s.find("AB");
+            return minLength(s.substr(0, found) + s.substr(found + 2));
+        }
+        if(s.find("CD") != -1){
+            int found = s.find("CD");
+            return minLength(s.substr(0, found) + s.substr(found + 2));
+        }
+        return s.size();
+    }
+};
