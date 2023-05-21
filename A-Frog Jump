@@ -1,0 +1,77 @@
+int func(int i, vector<int> &v, vector<int> &dp){
+    if(i == 0){
+        return 0;
+    }
+    if(dp[i] != -1){
+        return dp[i];
+    }
+    int ans = INT_MAX;
+    if(i - 1 >= 0){
+        ans = min(ans, func(i - 1, v, dp) + abs(v[i] - v[i - 1]));
+    }
+    if(i - 2 >= 0){
+        ans = min(ans, func(i - 2, v, dp) + abs(v[i] - v[i - 2]));
+    }
+    return dp[i] = ans;
+}
+
+//------------------------------------code------------------------------------//
+ 
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0); 
+    ll T = 1;
+    // cin >> T;
+    while(T--){
+        int n; cin >> n;
+        vector<int> v(n); inarr(0, n, v);
+        vector<int> dp(n, -1);
+        cout << func(n - 1, v, dp) << endl;
+        sahil:; 
+    }
+    return 0;
+}
+
+----------------------------------------------------------------------------------------------------------------------------
+
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0); 
+    ll T = 1;
+    // cin >> T;
+    while(T--){
+        int n; cin >> n;
+        vector<int> v(n); inarr(0, n, v);
+        vector<int> dp(n, 0);
+        dp[0] = 0;
+        for(int i = 1; i < n; i++){
+            int ans = INT_MAX;
+            if(i - 2 >= 0){
+                ans = min(ans, dp[i - 2] + abs(v[i] - v[i - 2]));
+            }
+            ans = min(ans, dp[i - 1] + abs(v[i] - v[i - 1]));
+            dp[i] = ans;
+        }
+        cout << dp[n - 1] << endl;
+        sahil:; 
+    }
+    return 0;
+}
+
+---------------------------------------------------------------------------------------------------
+
+while(T--){
+        int n; cin >> n;
+        vector<int> v(n); inarr(0, n, v);
+        vector<int> dp(n, 0);
+        int p2 = 0, p1 = abs(v[1] - v[0]);
+        for(int i = 2; i < n; i++){
+            int curr = INT_MAX;
+            curr = min(curr, p2 + abs(v[i] - v[i - 2]));
+            curr = min(curr, p1 + abs(v[i] - v[i - 1]));
+            p2 = p1;
+            p1 = curr;
+        }
+        cout << p1 << endl;
+        sahil:; 
+    }
