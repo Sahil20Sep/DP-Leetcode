@@ -1,0 +1,36 @@
+class Solution {
+public:
+
+    int func(int row, int i, int j, int m, int n, vector<vector<int>> &grid, vector<vector<vector<int>>> &dp){
+        if(row == n){
+            return 0;
+        }
+        if(dp[row][i][j] != -1){
+            return dp[row][i][j];
+        }
+        int ans = INT_MIN;
+        for(int a = -1; a <= 1; a++){
+            for(int b = -1; b <= 1; b++){
+                if(i == j){
+                    if(i + a >= 0 && i + a < m && j + b >= 0 && j + b < m){
+                        ans = max(ans, func(row + 1, i + a, j + b, m, n, grid, dp) + grid[row][j]);
+                    }
+                }else{
+                    if(i + a >= 0 && i + a < m && j + b >= 0 && j + b < m){
+                        ans = max(ans, func(row + 1, i + a, j + b, m, n, grid, dp) + grid[row][i] + grid[row][j]);
+                    }
+                }
+            }
+        }
+        return dp[row][i][j] = ans;
+    }
+
+    int cherryPickup(vector<vector<int>>& grid) {
+        int n = grid.size(), m = grid[0].size();
+        vector<vector<vector<int>>> dp(n, vector<vector<int>> (m, vector<int> (m, -1)));
+        return func(0, 0, m - 1, m, n, grid, dp);
+    }
+};
+
+---------------------------------------------------------------------------------------------------------------------------------
+
