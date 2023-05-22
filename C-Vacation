@@ -1,0 +1,69 @@
+int n; cin >> n;
+        vector<vector<int>> v(n, vector<int> (3));
+        for(int i = 0; i < n; i++){
+            cin >> v[i][0] >> v[i][1] >> v[i][2];
+        }
+        vector<vector<int>> dp(n, vector<int> (4, 0));
+        // cout << func(n - 1, 3, v, dp) << endl;
+        dp[0][0] = max(v[0][1], v[0][2]);
+        dp[0][1] = max(v[0][0], v[0][2]);
+        dp[0][2] = max(v[0][1], v[0][0]);
+        dp[0][3] = max(v[0][0], max(v[0][1], v[0][2]));
+        for(int i = 1; i < n; i++){
+            for(int j = 0; j < 4; j++){
+                int ans = INT_MIN;
+                for(int k = 0; k < 3; k++){
+                    if(j != k){
+                        ans = max(ans, dp[i - 1][k] + v[i][k]);
+                    }
+                }
+                dp[i][j] = ans;
+            }
+        }
+        cout << dp[n - 1][3] << endl;
+        
+----------------------------------------------------------------------------
+
+int func(int i, int choose, vector<vector<int>> &v, vector<vector<int>> &dp){
+    if(i < 0){
+        return 0;
+    }
+    if(dp[i][choose] != -1){
+        return dp[i][choose];
+    }
+    int ans = INT_MIN;
+    for(int j = 0; j < 3; j++){
+        if(j != choose){
+            ans = max(ans, func(i - 1, j, v, dp) + v[i][j]);
+        }
+    }
+    return dp[i][choose] = ans;
+}
+
+---------------------------------------------------------------------------
+
+int n; cin >> n;
+        vector<vector<int>> v(n, vector<int> (3));
+        for(int i = 0; i < n; i++){
+            cin >> v[i][0] >> v[i][1] >> v[i][2];
+        }
+        vector<int> prev(4);
+        // cout << func(n - 1, 3, v, dp) << endl;
+        prev[0] = max(v[0][1], v[0][2]);
+        prev[1] = max(v[0][0], v[0][2]);
+        prev[2] = max(v[0][1], v[0][0]);
+        prev[3] = max(v[0][0], max(v[0][1], v[0][2]));
+        for(int i = 1; i < n; i++){
+            vector<int> curr(4, 0);
+            for(int j = 0; j < 4; j++){
+                int ans = INT_MIN;
+                for(int k = 0; k < 3; k++){
+                    if(j != k){
+                        ans = max(ans, prev[k] + v[i][k]);
+                    }
+                }
+                curr[j] = ans;
+            }
+            prev = curr;
+        }
+        cout << prev[3] << endl;
