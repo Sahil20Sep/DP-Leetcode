@@ -35,3 +35,68 @@ public:
         return func(n - 1, find, nums, dp);
     }
 };
+
+---------------------------------------------------------------------------------
+
+int findTargetSumWays(vector<int>& nums, int target) {
+        int n = nums.size();
+        int total = accumulate(nums.begin(), nums.end(), 0);
+        if(total < target || (total - target) & 1){
+            return 0;
+        }
+        int find = (total - target) >> 1;
+        vector<vector<int>> dp(n, vector<int> (find + 1, 0));
+        // return func(n - 1, find, nums, dp);
+        if(nums[0] == 0){
+            dp[0][0] = 2;
+        }else{
+            dp[0][0] = 1;
+        }
+        if(nums[0] <= find && nums[0] != 0){
+            dp[0][nums[0]] = 1;
+        }
+        for(int i = 1; i < n; i++){
+            for(int target = 0; target <= find; target++){
+                int ans = 0;
+                ans += dp[i - 1][target];
+                if(target - nums[i] >= 0){
+                    ans += dp[i - 1][target - nums[i]];
+                }
+                dp[i][target] = ans;
+            }
+        }
+        return dp[n - 1][find];
+    }
+    
+    ------------------------------------------------------------------------------------
+    
+    int findTargetSumWays(vector<int>& nums, int target) {
+        int n = nums.size();
+        int total = accumulate(nums.begin(), nums.end(), 0);
+        if(total < target || (total - target) & 1){
+            return 0;
+        }
+        int find = (total - target) >> 1;
+        vector<int> prev(find + 1, 0), temp(find + 1, 0);
+        // return func(n - 1, find, nums, dp);
+        if(nums[0] == 0){
+            prev[0] = 2;
+        }else{
+            prev[0] = 1;
+        }
+        if(nums[0] <= find && nums[0] != 0){
+            prev[nums[0]] = 1;
+        }
+        for(int i = 1; i < n; i++){
+            for(int target = 0; target <= find; target++){
+                int ans = 0;
+                ans += prev[target];
+                if(target - nums[i] >= 0){
+                    ans += prev[target - nums[i]];
+                }
+                temp[target] = ans;
+            }
+            prev = temp;
+        }
+        return prev[find];
+    }
