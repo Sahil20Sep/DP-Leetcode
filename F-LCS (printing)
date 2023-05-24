@@ -1,0 +1,35 @@
+string s; cin >> s;
+        string t; cin >> t;
+        int n = s.size(), m = t.size();
+        vector<vector<int>> dp(n + 1, vector<int> (m + 1, 0));
+        for(int i = 1; i <= n; i++){
+            for(int j = 1; j <= m; j++){
+                if(s[i - 1] == t[j - 1]){
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                }else{
+                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        // for(auto i : dp){
+        //     for(auto j : i){
+        //         cout << j << ' ';
+        //     }
+        //     ce;
+        // }
+        int slow = n, fast = m;
+        string temp = "";
+        while(slow > 0 && fast > 0){
+            if(s[slow - 1] == t[fast - 1]){
+                temp.pb(s[slow - 1]);
+                slow--; fast--;
+            }else{
+                if(dp[slow - 1][fast] < dp[slow][fast - 1]){
+                    fast--;
+                }else{
+                    slow--;
+                }
+            }
+        }
+        reverse(all(temp));
+        c(temp);
