@@ -1,0 +1,26 @@
+class Solution {
+public:
+
+    long long func(int i, int choose, vector<int> &v, vector<vector<long long>> &dp){
+        if(i < 0){
+            return 0;
+        }
+        if(dp[i][choose] != -1){
+            return dp[i][choose];
+        }
+        long long ans = INT_MIN;
+        ans = max(ans, func(i - 1, choose, v, dp));
+        if(choose == 1){
+            ans = max(ans, func(i - 1, 0, v, dp) - v[i]);
+        }else{
+            ans = max(ans, func(i - 1, 1, v, dp) + v[i]);
+        }
+        return dp[i][choose] = ans;
+    }
+
+    long long maxAlternatingSum(vector<int>& nums) {
+        int n = nums.size(); 
+        vector<vector<long long>> dp(n, vector<long long> (2, -1));
+        return func(n - 1, 0, nums, dp);
+    }
+};
