@@ -1,0 +1,103 @@
+class Solution {
+public:
+    
+    int func(int i, int target, vector<int> &coins, vector<vector<int>> &dp){
+        if(target == 0){
+            return 0;
+        }
+        if(i < 0){
+            return 1e5;
+        }
+        if(dp[i][target] != -1){
+            return dp[i][target];
+        }
+        int ans = 1e5;
+        ans = min(ans, func(i - 1, target, coins, dp));
+        if(target - coins[i] >= 0){
+            ans = min(ans, func(i, target - coins[i], coins, dp) + 1);
+        }
+        return dp[i][target] = ans;
+    }
+
+    int coinChange(vector<int>& coins, int amount) {
+        int n = coins.size();
+        vector<vector<int>> dp(n, vector<int> (amount + 1, -1));
+        int ans = func(n - 1, amount, coins, dp);
+        if(ans == 1e5){
+            return -1;
+        }else{
+            return ans;
+        }
+    }
+};
+
+------------------------------------------------------------------------------------------
+
+int coinChange(vector<int>& coins, int amount) {
+        int n = coins.size();
+        vector<vector<int>> dp(n, vector<int> (amount + 1, 0));
+        // int ans = func(n - 1, amount, coins, dp);
+        // if(ans == 1e5){
+        //     return -1;
+        // }else{
+        //     return ans;
+        // }
+        for(int i = 0; i <= amount; i++){
+            if((i % coins[0]) == 0){
+                dp[0][i] = (i / coins[0]);
+            }else{
+                dp[0][i] = 1e5;
+            }
+        }
+        for(int i = 1; i < n; i++){
+            for(int target = 0; target <= amount; target++){
+                int ans = 1e5;
+                ans = min(ans, dp[i - 1][target]);
+                if(target - coins[i] >= 0){
+                    ans = min(ans, dp[i][target - coins[i]] + 1);
+                }
+                dp[i][target] = ans;
+            }
+        }
+        if(dp[n - 1][amount] == 1e5){
+            return -1;
+        }else{
+            return dp[n - 1][amount];
+        }
+    }
+    
+    --------------------------------------------------------------------------------------------
+    
+    int coinChange(vector<int>& coins, int amount) {
+        int n = coins.size();
+        vector<int> prev(amount + 1, 0), temp(amount + 1, 0);
+        // int ans = func(n - 1, amount, coins, dp);
+        // if(ans == 1e5){
+        //     return -1;
+        // }else{
+        //     return ans;
+        // }
+        for(int i = 0; i <= amount; i++){
+            if((i % coins[0]) == 0){
+                prev[i] = (i / coins[0]);
+            }else{
+                prev[i] = 1e5;
+            }
+        }
+        for(int i = 1; i < n; i++){
+            for(int target = 0; target <= amount; target++){
+                int ans = 1e5;
+                ans = min(ans, prev[target]);
+                if(target - coins[i] >= 0){
+                    ans = min(ans, temp[target - coins[i]] + 1);
+                }
+                temp[target] = ans;
+            }
+            prev = temp;
+        }
+        if(prev[amount] == 1e5){
+            return -1;
+        }else{
+            return prev[amount];
+        }
+    }
