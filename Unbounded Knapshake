@@ -63,3 +63,27 @@ int knapSack(int n, int w, int val[], int wt[])
         }
         return prev[w];
     }
+    
+----------------------------------------------------------------------------------------
+
+                        (1D array - 1)
+
+int knapSack(int n, int w, int val[], int wt[])
+    {
+        vector<int> prev(w + 1, 0);
+        // return func(n - 1, w, wt, val, dp);
+        for(int i = wt[0]; i <= w; i++){
+            prev[i] = (i / wt[0]) * val[0];
+        }
+        for(int i = 1; i < n; i++){
+            for(int have = 0; have <= w; have++){
+                int ans = INT_MIN;
+                ans = max(ans, prev[have]);
+                if(have - wt[i] >= 0){
+                    ans = max(ans, prev[have - wt[i]] + val[i]);
+                }
+                prev[have] = ans;
+            }
+        }
+        return prev[w];
+    }
