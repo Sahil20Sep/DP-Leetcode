@@ -1,0 +1,64 @@
+int func(int i, int w, int wt[], int val[], vector<vector<int>> &dp){
+        if(i < 0){
+            return 0;
+        }
+        if(dp[i][w] != -1){
+            return dp[i][w];
+        }
+        int ans = INT_MIN;
+        ans = max(ans, func(i - 1, w, wt, val, dp));
+        if(w - wt[i] >= 0){
+            ans = max(ans, func(i - 1, w - wt[i], wt, val, dp) + val[i]);
+        }
+        return dp[i][w] = ans;
+    }
+    
+    int knapSack(int w, int wt[], int val[], int n) 
+    { 
+        vector<vector<int>> dp(n, vector<int> (w + 1, -1));
+        return func(n - 1, w, wt, val, dp);
+    }
+    
+    ----------------------------------------------------------------------------------
+    
+    int knapSack(int w, int wt[], int val[], int n) 
+    { 
+        vector<int> prev(w + 1, 0), temp(w + 1, 0);
+        // return func(n - 1, w, wt, val, dp);
+        for(int i = wt[0]; i <= w; i++){
+            prev[i] = val[0];
+        }
+        for(int i = 1; i < n; i++){
+            for(int j = 0; j <= w; j++){
+                int ans = INT_MIN;
+                ans = max(ans, prev[j]);
+                if(j - wt[i] >= 0){
+                    ans = max(ans, prev[j - wt[i]] + val[i]);
+                }
+                temp[j] = ans;
+            }
+            prev = temp;
+        }
+        return prev[w];
+        
+    -------------------------------------------------------------------------------------
+        
+    int knapSack(int w, int wt[], int val[], int n) 
+    { 
+        vector<vector<int>> dp(n, vector<int> (w + 1, 0));
+        // return func(n - 1, w, wt, val, dp);
+        for(int i = wt[0]; i <= w; i++){
+            dp[0][i] = val[0];
+        }
+        for(int i = 1; i < n; i++){
+            for(int j = 0; j <= w; j++){
+                int ans = INT_MIN;
+                ans = max(ans, dp[i - 1][j]);
+                if(j - wt[i] >= 0){
+                    ans = max(ans, dp[i - 1][j - wt[i]] + val[i]);
+                }
+                dp[i][j] = ans;
+            }
+        }
+        return dp[n - 1][w];
+    }
