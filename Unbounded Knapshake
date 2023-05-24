@@ -1,0 +1,65 @@
+int func(int i, int have, int wt[], int val[], vector<vector<int>> &dp){
+        if(i < 0){
+            return 0;
+        }
+        if(dp[i][have] != -1){
+            return dp[i][have];
+        }
+        int ans = INT_MIN;
+        ans = max(ans, func(i - 1, have, wt, val, dp));
+        if(have - wt[i] >= 0){
+            ans = max(ans, func(i, have - wt[i], wt, val, dp) + val[i]);
+        }
+        return dp[i][have] = ans;
+    }
+
+    int knapSack(int n, int w, int val[], int wt[])
+    {
+        vector<vector<int>> dp(n, vector<int> (w + 1, 0));
+        return func(n - 1, w, wt, val, dp);
+    }
+    
+------------------------------------------------------------------------------------------
+
+int knapSack(int n, int w, int val[], int wt[])
+    {
+        vector<vector<int>> dp(n, vector<int> (w + 1, 0));
+        // return func(n - 1, w, wt, val, dp);
+        for(int i = wt[0]; i <= w; i++){
+            dp[0][i] = (i / wt[0]) * val[0];
+        }
+        for(int i = 1; i < n; i++){
+            for(int have = 0; have <= w; have++){
+                int ans = INT_MIN;
+                ans = max(ans, dp[i - 1][have]);
+                if(have - wt[i] >= 0){
+                    ans = max(ans, dp[i][have - wt[i]] + val[i]);
+                }
+                dp[i][have] = ans;
+            }
+        }
+        return dp[n - 1][w];
+    }
+    
+--------------------------------------------------------------------------------------
+
+int knapSack(int n, int w, int val[], int wt[])
+    {
+        vector<int> prev(w + 1, 0), temp(w + 1, 0);
+        // return func(n - 1, w, wt, val, dp);
+        for(int i = wt[0]; i <= w; i++){
+            prev[i] = (i / wt[0]) * val[0];
+        }
+        for(int i = 1; i < n; i++){
+            for(int have = 0; have <= w; have++){
+                int ans = INT_MIN;
+                ans = max(ans, prev[have]);
+                if(have - wt[i] >= 0){
+                    ans = max(ans, temp[have - wt[i]] + val[i]);
+                }
+                temp[have] = ans;
+            }
+            prev = temp;
+        }
+        return prev[w];
+    }
