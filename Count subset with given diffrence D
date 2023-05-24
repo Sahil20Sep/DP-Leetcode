@@ -41,3 +41,75 @@ int countPartitions(int n, int d, vector<int> &arr) {
 
 ----------------------------------------------------------------------------------
 
+int countPartitions(int n, int d, vector<int> &arr) {
+    int total = 0;
+    for(int i = 0; i < n; i++){
+        total += arr[i];
+    }
+    if(total < d || (total - d) & 1){
+        return 0;
+    }
+    int find = (total - d) >> 1;
+    vector<vector<int>> dp(n, vector<int> (find + 1, 0));
+    // int mul = pow(2, count(arr.begin(), arr.end(), 0));
+    // int ans = (func(n - 1, find, arr, dp) * mul) % mod;
+    // return func(n - 1, find, arr, dp) % mod;
+    if(arr[0] == 0){
+        dp[0][0] = 2;
+    }else{
+        dp[0][0] = 1;
+    }
+    if(arr[0] <= find && arr[0] != 0){
+        dp[0][arr[0]] = 1;
+    }
+    for(int i = 1; i < n; i++){
+        for(int target = 0; target <= find; target++){
+            int ans = 0;
+            ans = (ans + dp[i - 1][target]) % mod;
+            if(target - arr[i] >= 0){
+                ans = (ans + dp[i - 1][target - arr[i]]) % mod;
+            }
+            dp[i][target] = ans;
+        }
+    }
+    return dp[n - 1][find];
+}
+
+(main thing is base case)
+
+----------------------------------------------------------------------------------------
+
+int countPartitions(int n, int d, vector<int> &arr) {
+    int total = 0;
+    for(int i = 0; i < n; i++){
+        total += arr[i];
+    }
+    if(total < d || (total - d) & 1){
+        return 0;
+    }
+    int find = (total - d) >> 1;
+    vector<int> prev(find + 1, 0), temp(find + 1, 0);
+    // int mul = pow(2, count(arr.begin(), arr.end(), 0));
+    // int ans = (func(n - 1, find, arr, dp) * mul) % mod;
+    // return func(n - 1, find, arr, dp) % mod;
+    if(arr[0] == 0){
+        prev[0] = 2;
+    }else{
+        prev[0] = 1;
+    }
+    if(arr[0] <= find && arr[0] != 0){
+        prev[arr[0]] = 1;
+    }
+    for(int i = 1; i < n; i++){
+        for(int target = 0; target <= find; target++){
+            int ans = 0;
+            ans = (ans + prev[target]) % mod;
+            if(target - arr[i] >= 0){
+                ans = (ans + prev[target - arr[i]]) % mod;
+            }
+            temp[target] = ans;
+        }
+        prev = temp;
+    }
+    return prev[find];
+}
