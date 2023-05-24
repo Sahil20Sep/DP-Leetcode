@@ -1,0 +1,43 @@
+#include <bits/stdc++.h> 
+const int mod = 1e9 + 7;
+
+int func(int i, int target, vector<int> &v, vector<vector<int>> &dp){
+    if(i == 0){
+        if(target == 0 && v[0] == 0){
+            return 2;
+        }else if(target == 0 || target == v[0]){
+            return 1;
+        }
+        return 0;
+    }
+    if(i < 0){
+        return 0;
+    }
+    if(dp[i][target] != -1){
+        return dp[i][target];
+    }
+    int ans = 0;
+    ans = (ans + func(i - 1, target, v, dp)) % mod;
+    if(target - v[i] >= 0){
+        ans = (ans + func(i - 1, target - v[i], v, dp)) % mod;
+    }
+    return dp[i][target] = ans;
+}
+
+int countPartitions(int n, int d, vector<int> &arr) {
+    int total = 0;
+    for(int i = 0; i < n; i++){
+        total += arr[i];
+    }
+    if(total < d || (total - d) & 1){
+        return 0;
+    }
+    int find = (total - d) >> 1;
+    vector<vector<int>> dp(n, vector<int> (find + 1, -1));
+    // int mul = pow(2, count(arr.begin(), arr.end(), 0));
+    // int ans = (func(n - 1, find, arr, dp) * mul) % mod;
+    return func(n - 1, find, arr, dp) % mod;
+}
+
+----------------------------------------------------------------------------------
+
