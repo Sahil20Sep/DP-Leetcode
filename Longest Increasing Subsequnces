@@ -152,3 +152,19 @@ int lengthOfLIS(vector<int>& v) {
         cout << endl;
         return ans;
     }
+    
+ ------------------------------------------------------------------------------
+ 
+ int lengthOfLIS(vector<int>& v) {
+        set<int> ms;
+        for(int i = 0; i < v.size(); i++){
+            if(ms.empty() || *(--ms.end()) < v[i]){
+                ms.insert(v[i]);
+            }else{
+                auto just = ms.lower_bound(v[i]);
+                ms.erase(ms.find(*(just)));
+                ms.insert(v[i]);
+            }
+        }
+        return (int)ms.size();
+    }
