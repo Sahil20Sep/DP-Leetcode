@@ -62,3 +62,17 @@ int maxProfit(vector<int>& v) {
         }
         return dp[0][1];
     }
+    
+---------------------------------------------------------------------------------
+
+int maxProfit(vector<int>& v) {
+        int n = v.size();
+        vector<int> f1(2, 0), f2(2, 0), temp(2, 0);
+        for(int i = n - 1; i >= 0; i--){
+            temp[0] = max(f1[0], f2[1] + v[i]);
+            temp[1] = max(f1[1], f1[0] - v[i]);
+            f2 = f1;
+            f1 = temp;   
+        }
+        return f1[1];
+    }
