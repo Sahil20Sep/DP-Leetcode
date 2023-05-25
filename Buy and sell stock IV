@@ -59,3 +59,25 @@ public:
         return func(0, 0, v, dp, k);
     }
 };
+
+--------------------------------------------------------------------------------------------------------
+
+int maxProfit(int k, vector<int>& v) {
+        int n = v.size();
+        vector<vector<int>> dp(n + 1, vector<int> ((2 * k) + 1, 0));
+        // return func(0, 0, v, dp);
+        for(int i = n - 1; i >= 0; i--){
+            for(int option = 0; option < (2 * k); option++){
+                int ans = 0;
+                if(option % 2 == 0){
+                    ans = max(ans, dp[i + 1][option + 1] - v[i]);
+                    ans = max(ans, dp[i + 1][option]);
+                }else{
+                    ans = max(ans, dp[i + 1][option + 1] + v[i]);
+                    ans = max(ans, dp[i + 1][option]);
+                }
+                dp[i][option] = ans;
+            }
+        }
+        return dp[0][0];
+    }
