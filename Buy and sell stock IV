@@ -27,3 +27,35 @@ public:
         return func(0, 1, 0, v, dp, k);
     }
 };
+
+--------------------------------------------------------------------------------------------------------------
+
+class Solution {
+public:
+
+    int func(int i, int option, vector<int> &v, vector<vector<int>> &dp, int k){
+        if(i == v.size() || option == (2 * k)){
+            return 0;
+        }
+        if(dp[i][option] != -1){
+            return dp[i][option];
+        }
+        int ans = 0;
+        // if(option < 4){
+            if(option % 2 == 0){
+                ans = max(ans, func(i + 1, option + 1, v, dp, k) - v[i]);
+                ans = max(ans, func(i + 1, option, v, dp, k));
+            }else{
+                ans = max(ans, func(i + 1, option + 1, v, dp, k) + v[i]);
+                ans = max(ans, func(i + 1, option, v, dp, k));
+            }
+        // }
+        return dp[i][option] = ans;
+    }
+
+    int maxProfit(int k, vector<int>& v) {
+        int n = v.size();
+        vector<vector<int>> dp(n, vector<int> (k * 2, -1));
+        return func(0, 0, v, dp, k);
+    }
+};
