@@ -49,3 +49,5 @@ int maxProfit(vector<int>& v, int fee) {
         }
         return down;
     }
+    
+    (both side is ok your choise)
