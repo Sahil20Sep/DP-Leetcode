@@ -90,3 +90,80 @@ int maxProfit(vector<int>& v) {
         return next[1][0];
     }
 ----------------------------------------------------------------------------------------------------------
+
+            with n * 4 space complexity
+
+class Solution {
+public:
+
+    int func(int i, int option, vector<int> &v, vector<vector<int>> &dp){
+        if(i == v.size() || option == 4){
+            return 0;
+        }
+        if(dp[i][option] != -1){
+            return dp[i][option];
+        }
+        int ans = 0;
+        // if(option < 4){
+            if(option % 2 == 0){
+                ans = max(ans, func(i + 1, option + 1, v, dp) - v[i]);
+                ans = max(ans, func(i + 1, option, v, dp));
+            }else{
+                ans = max(ans, func(i + 1, option + 1, v, dp) + v[i]);
+                ans = max(ans, func(i + 1, option, v, dp));
+            }
+        // }
+        return dp[i][option] = ans;
+    }
+
+    int maxProfit(vector<int>& v) {
+        int n = v.size();
+        vector<vector<int>> dp(n, vector<int> (4, -1));
+        return func(0, 0, v, dp);
+    }
+};
+
+-------------------------------------------------------------------------------------------------------------------
+
+int maxProfit(vector<int>& v) {
+        int n = v.size();
+        vector<vector<int>> dp(n + 1, vector<int> (5, 0));
+        // return func(0, 0, v, dp);
+        for(int i = n - 1; i >= 0; i--){
+            for(int option = 0; option < 4; option++){
+                int ans = 0;
+                if(option % 2 == 0){
+                    ans = max(ans, dp[i + 1][option + 1] - v[i]);
+                    ans = max(ans, dp[i + 1][option]);
+                }else{
+                    ans = max(ans, dp[i + 1][option + 1] + v[i]);
+                    ans = max(ans, dp[i + 1][option]);
+                }
+                dp[i][option] = ans;
+            }
+        }
+        return dp[0][0];
+    }
+    
+ ---------------------------------------------------------------------------------------
+ 
+ int maxProfit(vector<int>& v) {
+        int n = v.size();
+        vector<int> next(5, 0), temp(5, 0);
+        // return func(0, 0, v, dp);
+        for(int i = n - 1; i >= 0; i--){
+            for(int option = 0; option < 4; option++){
+                int ans = 0;
+                if(option % 2 == 0){
+                    ans = max(ans, next[option + 1] - v[i]);
+                    ans = max(ans, next[option]);
+                }else{
+                    ans = max(ans, next[option + 1] + v[i]);
+                    ans = max(ans, next[option]);
+                }
+                temp[option] = ans;
+            }
+            next = temp;
+        }
+        return next[0];
+    }
