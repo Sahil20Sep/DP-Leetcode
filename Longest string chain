@@ -1,0 +1,58 @@
+bool compare(string &s, string &t){
+        return s.size() < t.size();
+}
+
+class Solution {
+public:
+
+    bool func(string &s, string &t){
+        if(s.size() != t.size() + 1){
+            return false;
+        }
+        int slow = 0, fast = 0;
+        int cnt = 0;
+        while(slow < s.size()){
+            if(s[slow] == t[fast]){
+                slow++; fast++;
+            }else{
+                cnt++;
+                if(cnt >= 2){
+                    break;
+                }
+                slow++;
+            }
+        }
+        return (cnt == 1);
+    }
+
+    int longestStrChain(vector<string>& v) {
+        int n = v.size();
+        sort(v.begin(), v.end(), compare);
+        vector<int> dp(n, 1), hash(n);
+        int ans = 1, store = 0;
+        for(int i = 0; i < n; i++){
+            hash[i] = i;
+            for(int j = 0; j < i; j++){
+                if(func(v[i], v[j]) && 1 + dp[j] > dp[i]){
+                    dp[i] = 1 + dp[j];
+                    hash[i] = j;
+                }
+            }
+            if(dp[i] > ans){
+                ans = dp[i];
+                store = i;
+            }
+        }
+        vector<string> fin;
+        fin.push_back(v[store]);
+        while(store != hash[store]){
+            store = hash[store];
+            fin.push_back(v[store]);
+        }
+        for(int i = 0; i < fin.size(); i++){
+            cout << fin[i] << ' ';
+        }
+        cout << endl;
+        return ans;
+    }
+};
