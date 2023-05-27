@@ -1,0 +1,47 @@
+class Solution {
+public:
+
+    int func(int i, int j, vector<int> &v, vector<vector<int>> &dp){
+        if(i > j){
+            return 0;
+        }
+        if(dp[i][j] != -1){
+            return dp[i][j];
+        }
+        long long ans = INT_MAX;
+        for(int k = i; k <= j; k++){
+            ans = min(ans, 0LL + v[j + 1] - v[i - 1] + func(i, k - 1, v, dp) + func(k + 1, j, v, dp));
+        }
+        return dp[i][j] = ans;
+    }
+
+    int minCost(int n, vector<int>& v) {
+        v.push_back(n);
+        v.insert(v.begin(), 0);
+        int s = v.size();
+        sort(v.begin(), v.end());
+        vector<vector<int>> dp(s, vector<int> (s, -1));
+        return func(1, s - 2, v, dp);
+    }
+};
+
+----------------------------------------------------------------------------------------------------------------------
+
+int minCost(int n, vector<int>& v) {
+        v.push_back(n);
+        v.insert(v.begin(), 0);
+        int s = v.size();
+        sort(v.begin(), v.end());
+        vector<vector<int>> dp(s, vector<int> (s, 0));
+        // return func(1, s - 2, v, dp);
+        for(int i = s - 2; i >= 1; i--){
+            for(int j = i; j <= s - 2; j++){
+                int ans = INT_MAX;
+                for(int k = i; k <= j; k++){
+                    ans = min(ans, v[j + 1] - v[i - 1] + dp[i][k - 1] + dp[k + 1][j]);
+                }
+                dp[i][j] = ans;
+            }
+        }
+        return dp[1][s - 2];
+    }
