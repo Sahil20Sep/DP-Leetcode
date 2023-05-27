@@ -1,0 +1,67 @@
+class Solution {
+public:
+
+    int func(int i, int prev, vector<int> &v, vector<vector<int>> &dp){
+        if(i == v.size()){
+            return 0;
+        }
+        if(dp[i][prev + 1] != -1){
+            return dp[i][prev + 1];
+        }
+        int ans = 0;
+        ans = max(ans, func(i + 1, prev, v, dp));
+        if(prev == -1 || v[i] % v[prev] == 0){
+            ans = max(ans, func(i + 1, i, v, dp) + 1);
+        }
+        return dp[i][prev + 1] = ans;
+    }
+
+    vector<int> largestDivisibleSubset(vector<int>& v) {
+        int n = v.size();
+        sort(v.begin(), v.end());
+        vector<vector<int>> dp(n + 1, vector<int> (n + 1, 0));
+        // cout << func(0, -1, v, dp) << endl;
+        for(int i = n - 1; i >= 0; i--){
+            for(int prev = i - 1; prev >= -1; prev--){
+                int ans = 0;
+                ans = max(ans, dp[i + 1][prev + 1]);
+                if(prev == -1 || v[i] % v[prev] == 0){
+                    ans = max(ans, dp[i + 1][i + 1] + 1);
+                }
+                dp[i][prev + 1] = ans;
+            }
+        }
+        // cout << dp[0][-1 + 1];
+    }
+};
+
+-------------------------------------------------------------------------------------------------
+
+vector<int> largestDivisibleSubset(vector<int>& v) {
+        int n = v.size();
+        sort(v.begin(), v.end());
+        vector<int> dp(n, 1), hash(n, 0);
+        for(int i = 0; i < n; i++){
+            hash[i] = i;
+        }
+        int ans = 1, store = 0;
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < i; j++){
+                if(v[i] % v[j] == 0 && (1 + dp[j]) > dp[i]){
+                    dp[i] = 1 + dp[j];
+                    hash[i] = j; 
+                }
+            }
+            if(dp[i] > ans){
+                ans = dp[i];
+                store = i;
+            }
+        }
+        vector<int> fi;
+        fi.push_back(v[store]);
+        while(hash[store] != store){
+            store = hash[store];
+            fi.push_back(v[store]);
+        }
+        return fi;
+    }
