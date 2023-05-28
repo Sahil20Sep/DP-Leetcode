@@ -1,0 +1,43 @@
+class Solution {
+public:
+
+    int func(int i, vector<int> &v, vector<int> &dp, int k, int n){
+        if(i >= v.size()){
+            return 0;
+        }
+        if(dp[i] != -1){
+            return dp[i];
+        }
+        int ans = INT_MIN;
+        int mx = INT_MIN;
+        for(int j = i; j < min(n, i + k); j++){
+            mx = max(mx, v[j]);
+            ans = max(ans, (mx * (j - i + 1)) + func(j + 1, v, dp, k, n));
+        }
+        return dp[i] = ans;
+    }
+
+    int maxSumAfterPartitioning(vector<int>& v, int k) {
+        int n = v.size();
+        vector<int> dp(n, -1);
+        return func(0, v, dp, k, n);
+    }
+};
+
+---------------------------------------------------------------------------------------
+
+int maxSumAfterPartitioning(vector<int>& v, int k) {
+        int n = v.size();
+        vector<int> dp(n + 1, 0);
+        // return func(0, v, dp, k, n);
+        for(int i = n - 1; i >= 0; i--){
+            int ans = INT_MIN;
+            int mx = INT_MIN;
+            for(int j = i; j < min(n, i + k); j++){
+                mx = max(mx, v[j]);
+                ans = max(ans, (mx * (j - i + 1)) + dp[j + 1]);
+            }
+            dp[i] = ans;
+        }
+        return dp[0];
+    }
