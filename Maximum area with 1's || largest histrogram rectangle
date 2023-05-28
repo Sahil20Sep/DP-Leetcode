@@ -1,0 +1,54 @@
+class Solution {
+public:
+
+    int func(vector<int> &v){
+        int n = v.size();
+        vector<int> left(n), right(n);
+        stack<int> st;
+        for(int i = 0; i < n; i++){
+            while(!st.empty() && v[st.top()] >= v[i]){
+                st.pop();
+            }
+            if(st.empty()){
+                left[i] = -1;
+            }else{
+                left[i] = st.top();
+            }
+            st.push(i);
+        }
+        stack<int> st1;
+        for(int i = n - 1; i >= 0; i--){
+            while(!st1.empty() && v[st1.top()] >= v[i]){
+                st1.pop();
+            }
+            if(st1.empty()){
+                right[i] = n;
+            }else{
+                right[i] = st1.top();
+            }
+            st1.push(i);
+        }
+        int ans = INT_MIN;
+        for(int i = 0; i < n; i++){
+            ans = max(ans, v[i] * (right[i] - left[i] - 1));
+        }
+        return ans;
+    }
+
+    int maximalRectangle(vector<vector<char>>& v) {
+        int n = v.size(), m = v[0].size();
+        vector<int> prev(m, 0);
+        int fin = INT_MIN;
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(v[i][j] == '1'){
+                    prev[j]++;
+                }else{
+                    prev[j] = 0;
+                }
+            }
+            fin = max(fin, func(prev));
+        }
+        return fin;
+    }
+};
