@@ -1,0 +1,22 @@
+class Solution {
+public:
+
+    int func(int i, vector<int> &v, vector<int> &dp){
+        if(i < 0){
+            return 0;
+        }
+        if(dp[i] != -1){
+            return dp[i];
+        }
+        int ans = INT_MIN;
+        ans = max(ans, func(i - 1, v, dp));
+        ans = max(ans, func(i - 2, v, dp) + v[i]);
+        return dp[i] = ans;
+    }
+
+    int rob(vector<int>& v) {
+        int n = v.size();
+        vector<int> dp(n, -1);
+        return func(n - 1, v, dp);
+    }
+};
