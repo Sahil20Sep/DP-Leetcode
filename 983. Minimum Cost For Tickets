@@ -1,0 +1,31 @@
+class Solution {
+public:
+
+    long long func(int i, int have, vector<int> &days, vector<int> &cost, vector<vector<int>> &dp){
+        if(i < 0){
+            return 0;
+        }
+        if(dp[i][have + 1] != -1){
+            return dp[i][have + 1];
+        }
+        long long ans = INT_MAX;
+        if(have != -1 && days[i] > have){
+            ans = min(ans, 0LL + func(i - 1, have, days, cost, dp));
+        }
+        for(int j = 0; j < 3; j++){
+            int sub = 0;
+            j == 0 ? sub = 1 : (j == 1 ? sub = 7 : sub = 30);
+            if(have == -1 || days[i] <= have){
+                ans = min(ans, 0LL + func(i - 1, max(days[i] - sub, 0), days, cost, dp) + cost[j]);
+            }
+        }
+        return dp[i][have + 1] = ans;
+    }
+
+    int mincostTickets(vector<int>& days, vector<int>& cost) {
+        int n = days.size();
+        int mx = *max_element(days.begin(), days.end());
+        vector<vector<int>> dp(n, vector<int> (mx + 2, -1));
+        return func(n - 1, -1, days, cost, dp);
+    }
+};
