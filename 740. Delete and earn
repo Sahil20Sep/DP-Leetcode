@@ -1,0 +1,70 @@
+class Solution {
+public:
+
+    int func(int i, vector<int> &v, map<int, int> &hash, vector<int> &dp, int n){
+        if(i >= n){
+            return 0;
+        }
+        if(dp[i] != -1){
+            return dp[i];
+        }
+        int ans = INT_MIN;
+        ans = max(ans, func(i + 1, v, hash, dp, n));
+        if(i + 1 < n && abs(v[i] - v[i + 1]) == 1){
+            ans = max(ans, hash[v[i]] + func(i + 2, v, hash, dp, n));
+        } 
+        if(i + 1 < n && abs(v[i] - v[i + 1]) != 1){
+            ans = max(ans, hash[v[i]] + func(i + 1, v, hash, dp, n));
+        } 
+        if(i + 1 == n){
+            ans = max(hash[v[i]], ans);
+        }
+        return dp[i] = ans;
+    }
+
+    int deleteAndEarn(vector<int>& nums) {
+        map<int, int> hash;
+        for(auto i : nums){
+            hash[i] += i;
+        }
+        vector<int> v;
+        for(auto i : hash){
+            v.push_back(i.first);
+        }
+        int n = v.size();
+        vector<int> dp(n, -1);
+        return func(0, v, hash, dp, n);
+    }
+};
+
+----------------------------------------------------------------------------------
+
+int deleteAndEarn(vector<int>& nums) {
+        map<int, int> hash;
+        for(auto i : nums){
+            hash[i] += i;
+        }
+        vector<int> v;
+        for(auto i : hash){
+            v.push_back(i.first);
+        }
+        int n = v.size();
+        vector<int> dp(n + 1, 0);
+        // return func(0, v, hash, dp, n);
+        for(int i = n - 1; i >= 0; i--){
+            int ans = INT_MIN;
+            ans = max(ans, dp[i + 1]);
+            if(i + 1 < n && abs(v[i] - v[i + 1]) == 1){
+                ans = max(ans, hash[v[i]] + dp[i + 2]);
+            } 
+            if(i + 1 < n && abs(v[i] - v[i + 1]) != 1){
+                ans = max(ans, hash[v[i]] + dp[i + 1]);
+            } 
+            if(i + 1 == n){
+                ans = max(hash[v[i]], ans);
+            }
+            dp[i] = ans;
+        }
+        return dp[0];
+    }
+-------------------------------------------------------------------------------
