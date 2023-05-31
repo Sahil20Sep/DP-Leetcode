@@ -1,0 +1,35 @@
+class Solution {
+public:
+
+    bool func(int i, map<string, int> &hash, string &s, vector<int> &dp){
+        if(i == s.size()){
+            return true;
+        }
+        if(dp[i] != -1){
+            return dp[i];
+        }
+        bool ans = false;
+        string temp = "";
+        for(int j = i; j < s.size(); j++){
+            temp += s[j];
+            if(hash[temp]){
+                ans |= func(j + 1, hash, s, dp);
+            }
+        }
+        return dp[i] = ans;
+    }
+
+    bool wordBreak(string s, vector<string>& v) {
+        int n = s.size();
+        int m = v.size();
+        map<string, int> hash;
+        for(int i = 0; i < m; i++){
+            hash[v[i]] = 1;
+        }
+        vector<int> dp(n, -1);
+        return func(0, hash, s, dp);
+    }
+};
+
+------------------------------------------------------------------------------
+
