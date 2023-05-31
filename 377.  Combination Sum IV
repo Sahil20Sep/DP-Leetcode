@@ -1,0 +1,28 @@
+class Solution {
+public:
+
+    int func(int target, int n, vector<int> &v, vector<int> &dp){
+        if(target == 0){
+            return 1;
+        }
+        if(dp[target] != -1){
+            return dp[target];
+        }
+        int ans = 0;
+        for(auto i : v){
+            if(target - i >= 0){
+                ans += func(target - i, n, v, dp);
+            }
+        }
+        return dp[target] = ans;
+    }
+
+    int combinationSum4(vector<int>& v, int target) {
+        int n = v.size();
+        vector<int> dp(target + 1, -1);
+        return func(target, n, v, dp);
+    }
+};
+
+----------------------------------------------------------------------
+
