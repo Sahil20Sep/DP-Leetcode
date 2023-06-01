@@ -1,0 +1,33 @@
+class Solution {
+public:
+
+    int func(int i, int j, int n, int m, vector<vector<int>> &v, vector<vector<int>> &dp){
+        vector<pair<int, int>> movement = {
+            {0, -1}, {0, 1}, {1, 0}, {-1, 0}
+        };
+        if(dp[i][j] != -1){
+            return dp[i][j];
+        }
+        int ans = 0;
+        for(auto k : movement){
+            int xx = i + k.first;
+            int yy = j + k.second;
+            if(xx >= 0 && xx < n && yy >= 0 && yy < m && v[xx][yy] > v[i][j]){
+                ans = max(ans, 1 + func(xx, yy, n, m, v, dp));
+            }
+        }
+        return dp[i][j] = ans;
+    }
+
+    int longestIncreasingPath(vector<vector<int>>& v) {
+        int n = v.size(), m = v[0].size();
+        vector<vector<int>> dp(n, vector<int> (m, -1));
+        int ans = 0;
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                ans = max(ans, func(i, j, n, m, v, dp));
+            }
+        }
+        return ans + 1;
+    }
+};
