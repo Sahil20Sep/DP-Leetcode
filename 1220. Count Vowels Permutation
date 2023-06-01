@@ -1,0 +1,43 @@
+class Solution {
+public:
+
+    const int mod = 1e9 + 7;
+
+    int func(int i, int prev, vector<vector<int>> &hash, vector<vector<int>> &dp, int n){
+        if(i == n){
+            return 1;
+        }
+        if(dp[i][prev + 1] != -1){
+            return dp[i][prev + 1];
+        }
+        int ans = 0;
+        if(prev == -1){
+            ans = (ans + func(i + 1, 'a' - 'a', hash, dp, n)) % mod;
+            ans = (ans + func(i + 1, 'e' - 'a', hash, dp, n)) % mod;
+            ans = (ans + func(i + 1, 'i' - 'a', hash, dp, n)) % mod;
+            ans = (ans + func(i + 1, 'o' - 'a', hash, dp, n)) % mod;
+            ans = (ans + func(i + 1, 'u' - 'a', hash, dp, n)) % mod;
+        }else{
+            for(auto j : hash[prev]){
+                ans = (ans + func(i + 1, j, hash, dp, n)) % mod;
+            }
+        }
+        return dp[i][prev + 1] = ans;
+    }
+
+    int countVowelPermutation(int n) {
+        vector<vector<int>> hash(26);
+        hash['a' - 'a'].push_back('e' - 'a');
+        hash['e' - 'a'].push_back('a' - 'a');
+        hash['e' - 'a'].push_back('i' - 'a');
+        hash['i' - 'a'].push_back('a' - 'a');
+        hash['i' - 'a'].push_back('e' - 'a');
+        hash['i' - 'a'].push_back('o' - 'a');
+        hash['i' - 'a'].push_back('u' - 'a');
+        hash['o' - 'a'].push_back('i' - 'a');
+        hash['o' - 'a'].push_back('u' - 'a');
+        hash['u' - 'a'].push_back('a' - 'a');
+        vector<vector<int>> dp(n + 1, vector<int> (27, -1));
+        return func(0, -1, hash, dp, n);
+    }
+};
