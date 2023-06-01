@@ -1,0 +1,47 @@
+class Solution {
+public:
+
+    int func(string &target, vector<vector<int>> &hash, map<string, int> &dp, int n, int m){
+        if(target.empty()){
+            return 0;
+        }
+        if(dp[target]){
+            return dp[target];
+        }
+        int c = target.size();
+        int ans = 1e6;
+        for(int i = 0; i < m; i++){
+            if(hash[i][target[0] - 'a']){
+                string rem = "";
+                auto temp = hash[i];
+                for(int j = 0; j < c; j++){
+                    if(temp[target[j] - 'a']){
+                        temp[target[j] - 'a']--;
+                    }else{
+                        rem += target[j];
+                    }
+                }
+                ans = min(ans, func(rem, hash, dp, n, m) + 1);
+            }
+        }
+        return dp[target] = ans;
+    }
+
+    int minStickers(vector<string>& s, string target) {
+        int n = target.size();
+        int m = s.size();
+        vector<vector<int>> hash(m, vector<int> (26, 0));
+        for(int i = 0; i < m; i++){
+            for(auto j : s[i]){
+                hash[i][j - 'a']++;
+            }
+        }
+        map<string, int> dp;
+        int ans = func(target, hash, dp, n, m);
+        if(ans == 1e6){
+            return -1;
+        }else{
+            return ans;
+        }
+    }
+};
