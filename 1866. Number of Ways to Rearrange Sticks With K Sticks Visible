@@ -1,0 +1,26 @@
+class Solution {
+public:
+
+    const int mod = 1e9 + 7;
+
+    long long func(int i, int k, vector<vector<int>> &dp){
+        if(i == 0 || k == 0){
+            return 0;
+        }
+        if(i == k){
+            return 1;
+        }
+        if(dp[i][k] != -1){
+            return dp[i][k];
+        }
+        long long ans = 0;
+        ans = (ans + ((i - 1) * func(i - 1, k, dp) * 1LL) % mod) % mod;
+        ans = (ans + func(i - 1, k - 1, dp)) % mod;
+        return dp[i][k] = ans;
+    }
+
+    int rearrangeSticks(int n, int k) {
+        vector<vector<int>> dp(n + 1, vector<int> (k + 1, -1));
+        return func(n, k, dp);
+    }
+};
