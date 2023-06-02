@@ -1,0 +1,31 @@
+class Solution {
+public:
+
+    int func(int i, int j, vector<int> &v, vector<vector<int>> &dp){
+        if(i > j){
+            return 0;
+        }
+        if(i == j){
+            return v[i];
+        }
+        if(dp[i][j] != -1){
+            return dp[i][j];
+        }
+        int ans = INT_MIN;
+        ans = max(ans, v[i] + min(func(i + 2, j, v, dp), func(i + 1, j - 1, v, dp)));
+        ans = max(ans, v[j] + min(func(i, j - 2, v, dp), func(i + 1, j - 1, v, dp)));
+        return dp[i][j] = ans;
+    }
+
+    bool PredictTheWinner(vector<int>& v) {
+        int n = v.size();
+        int sum = 0;
+        for(int i = 0; i < n; i++){
+            sum += v[i];
+        }
+        vector<vector<int>> dp(n, vector<int> (n, -1));
+        int alice = func(0, n - 1, v, dp);
+        int bob = sum - alice;
+        return alice >= bob;
+    }
+};
