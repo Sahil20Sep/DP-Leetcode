@@ -1,0 +1,43 @@
+class Solution {
+public:
+
+    int func(int i, int j, string &s, string &t, vector<vector<int>> &dp){
+        if(i < 0){
+            if(j < 0){
+                return true;
+            }
+            if(j % 2 == 0){
+                return false;
+            } 
+            for(int k = 1; k <= j; k += 2){
+                if(t[k] != '*'){
+                    return false;
+                }
+            }
+            return true;
+        }
+        if(j < 0){
+            return false;
+        }
+        if(dp[i][j] != -1){
+            return dp[i][j];
+        }
+        bool flag = false;
+        if(s[i] == t[j] || t[j] == '.'){
+            flag |= func(i - 1, j - 1, s, t, dp);
+        }
+        if(t[j] == '*'){
+            flag |= func(i, j - 2, s, t, dp);
+            if(t[j - 1] == '.' || s[i] == t[j - 1]){
+                flag |= func(i - 1, j, s, t, dp);
+            }
+        }
+        return dp[i][j] = flag;
+    }
+
+    bool isMatch(string s, string t) {
+        int n = s.size(), m = t.size();
+        vector<vector<int>> dp(n, vector<int> (m, -1));
+        return func(n - 1, m - 1, s, t, dp);
+    }
+};
