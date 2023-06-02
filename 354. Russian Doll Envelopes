@@ -36,3 +36,21 @@ public:
         return func(0, -1, v, dp);
     }
 };
+
+------------------------------------------------------------------------------------------
+
+int maxEnvelopes(vector<vector<int>>& v) {
+        int n = v.size(), m = v[0].size();
+        sort(v.begin(), v.end(), comp);
+        vector<int> dp(n, 1);
+        // return func(0, -1, v, dp);
+        int ans = 1;
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < i; j++){
+                if(v[j][0] < v[i][0] && v[j][1] < v[i][1] && 1 + dp[j] > dp[i]){
+                    dp[i] = 1 + dp[j];
+                    ans = max(ans, dp[i]);
+                }
+            }
+        }
+        return ans;
