@@ -1,0 +1,35 @@
+class Solution {
+public:
+
+    long long func(int i, int mod, vector<int> &v, vector<vector<int>> &dp){
+        if(i < 0){
+            if(mod == 0){
+                return 0;
+            }
+            return -1e8;
+        }
+        if(dp[i][mod] != -1){
+            return dp[i][mod];
+        }
+        long long ans = INT_MIN;
+        ans = max(ans, func(i - 1, mod, v, dp));
+        ans = max(ans, v[i] + func(i - 1, (v[i] + mod) % 3, v, dp));
+        return dp[i][mod] = ans;
+    }
+
+    int maxSumDivThree(vector<int>& v) {
+        int n = v.size();
+        vector<vector<long long>> dp(n + 1, vector<long long> (3, 0));
+        // return func(n - 1, 0, v, dp);
+        dp[0][1] = -1e8, dp[0][2] = -1e8;
+        for(int i = 1; i <= n; i++){
+            for(int mod = 2; mod >= 0; mod--){
+                long long ans = INT_MIN;
+                ans = max(ans, dp[i - 1][mod]);
+                ans = max(ans, v[i - 1] + dp[i - 1][(v[i - 1] + mod) % 3]);
+                dp[i][mod] = ans;
+            }
+        }
+        return dp[n][0];
+    }
+};
