@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int longestArithSeqLength(vector<int>& v) {
+        int n = v.size();
+        vector<vector<int>> dp(n, vector<int> (1001, 1));
+        int ans = 0;
+        for(int i = 1; i < n; i++){
+            for(int j = 0; j < i; j++){
+                int idx = v[i] - v[j] + 500;
+                dp[i][idx] = max(dp[i][idx], 1 + dp[j][idx]);
+                ans = max(ans, dp[i][idx]);
+            }
+        }
+        return ans;
+    }
+};
