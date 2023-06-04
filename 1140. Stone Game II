@@ -1,0 +1,31 @@
+class Solution {
+public:
+
+    int func(int kon, int i, int m, vector<int> &v, vector<vector<vector<int>>> &dp){
+        if(i >= v.size()){
+            return 0;
+        }
+        if(dp[kon][i][m] != -1){
+            return dp[kon][i][m];
+        }
+        int ans = (kon == 0) ? INT_MIN : INT_MAX;
+        int sum = 0;
+        for(int x = 1; x <= (2 * m); x++){
+            if(i + x - 1 < v.size()){
+                sum += v[i + x - 1];
+            }
+            if(kon){
+                ans = min(ans, func(0, i + x, max(m, x), v, dp));
+            }else{
+                ans = max(ans, sum + func(1, i + x, max(m, x), v, dp));
+            }
+        }
+        return dp[kon][i][m] = ans;
+    }
+
+    int stoneGameII(vector<int>& v) {
+        int n = v.size();
+        vector<vector<vector<int>>> dp(2, vector<vector<int>> (n + 1, vector<int> (n + 1, -1)));
+        return func(0, 0, 1, v, dp);
+    }
+};
