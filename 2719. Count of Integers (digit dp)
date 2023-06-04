@@ -1,0 +1,40 @@
+class Solution {
+public:
+    
+    int mod = 1e9 + 7;
+        
+    long long func(int i, int tight1, int tight2, int sum, string &s, string &t, vector<vector<vector<vector<int>>>> &dp){
+        if(sum < 0){
+            return 0;
+        }
+        if(i == t.size()){
+            return 1;
+        }
+        if(dp[i][tight1][tight2][sum] != -1){
+            return dp[i][tight1][tight2][sum];
+        }
+        int st = (tight1) ? s[i] - '0' : 0;
+        int en = (tight2) ? t[i] - '0' : 9;
+        int ans = 0;
+        for(int j = st; j <= en; j++){
+            ans = (ans + func(i + 1, tight1 & (j == st), tight2 & (j == en), sum - j, s, t, dp)) % mod;
+        }
+        return dp[i][tight1][tight2][sum] = ans;
+    }
+    
+    int count(string s, string t, int mn, int mx) {
+        int n = s.size(), m = t.size();
+        int d = m - n;
+        string co = "";
+        while(d--){
+            co += '0';
+        }
+        s = co + s;
+        vector<vector<vector<vector<int>>>> dp(m, vector<vector<vector<int>>> (2, vector<vector<int>> (2, vector<int> (401, -1))));
+        int mx1 = func(0, 1, 1, mx, s, t, dp);
+        dp.clear();
+        dp.resize(m, vector<vector<vector<int>>> (2, vector<vector<int>> (2, vector<int> (401, -1))));
+        int mx2 = func(0, 1, 1, mn - 1, s, t, dp);
+        return (mx1 - mx2) % mod;
+    }
+};
