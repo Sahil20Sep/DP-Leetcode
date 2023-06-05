@@ -1,0 +1,31 @@
+ll func(ll i, ll rem, vll &wei, vll val, vector<vll> &dp){
+    if(rem == 0){
+        return 0;
+    }
+    if(i < 0){
+        return 1e9 + 1;
+    }
+    if(dp[i][rem] != -1){
+        return dp[i][rem];
+    }
+    ll ans = 1e9 + 1;
+    ans = min(ans, func(i - 1, rem, wei, val, dp));
+    if(rem - val[i] >= 0){
+        ans = min(ans, func(i - 1, rem - val[i], wei, val, dp) + wei[i]);
+    }
+    return dp[i][rem] = ans;
+} 
+
+
+ll n, w; cin >> n >> w;
+vll val(n), wei(n);
+fori(i, 0, n){
+    cin >> wei[i] >> val[i];
+}
+vector<vector<ll>> dp(n, vector<ll> (1e5 + 1, -1));
+ifor(i, 1e5, 1){
+    if(func(n - 1, i, wei, val, dp) <= w){
+        cout << i << endl;
+        break;
+    }
+}
