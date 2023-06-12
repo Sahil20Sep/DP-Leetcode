@@ -1,0 +1,51 @@
+int func(int i, int choose, int flag, string &s, vector<vector<vector<int>>> &dp){
+    if(i < 0){
+        return 0;
+    }
+    if(dp[i][choose][flag] != -1){
+        return dp[i][choose][flag];
+    }
+    int a = pow(10, s[i] - 'A');
+    if(flag){
+        if(s[i] - 'A' >= choose){
+            return dp[i][choose][flag] = func(i - 1, s[i] - 'A', flag, s, dp) + a;
+        }
+        return dp[i][choose][flag] = func(i - 1, choose, flag, s, dp) - a;
+    }else{
+        int ans = -1e9;
+        if(s[i] - 'A' >= choose){
+            ans = max(ans, func(i - 1, s[i] - 'A', flag, s, dp) + a);
+        }else{
+            ans = max(ans, func(i - 1, choose, flag, s, dp) - a);
+        }
+        fori(j, 0, 5){
+            if(j == (s[i] - 'A')){
+                continue;
+            }
+            int b = pow(10, j);
+            if(j >= choose){
+                ans = max(ans, func(i - 1, j, !flag, s, dp) + b);
+            }else{
+                ans = max(ans, func(i - 1, choose, !flag, s, dp) - b);
+            }
+        }
+        return dp[i][choose][flag] = ans;
+    }
+}
+ 
+//------------------------------------code------------------------------------//
+ 
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    ll T;
+    cin >> T;
+    while(T--){ 
+        string s; cin >> s;
+        int n = s.size();
+        vector<vector<vector<int>>> dp(n, vector<vector<int>> (5, vector<int> (2, -1)));
+        cout << func(n - 1, 0, 0, s, dp) << endl;
+        sahil:; 
+    }
+    return 0;
+}
