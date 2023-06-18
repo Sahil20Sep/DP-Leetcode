@@ -1,0 +1,35 @@
+class Solution {
+public:
+    
+    int func(int idx, int wall_left, vector<int> &cost, vector<int> &time, vector<vector<int>> &dp){
+        
+        if(wall_left <= 0){
+            return 0;
+        }
+        
+        if(idx < 0){
+            return 1e9;
+        }
+        
+        if(dp[idx][wall_left] != -1){
+            return dp[idx][wall_left];
+        }
+        
+        int ans = 1e9;
+        
+        ans = min(ans, func(idx - 1, wall_left, cost, time, dp));
+        
+        ans = min(ans, cost[idx] + func(idx - 1, wall_left - 1 - time[idx], cost, time, dp));
+        
+        return dp[idx][wall_left] = ans;
+    }
+    
+    int paintWalls(vector<int>& cost, vector<int>& time) {
+        
+        int n = cost.size();
+        
+        vector<vector<int>> dp(n, vector<int> (n + 1, -1));
+        
+        return func(n - 1, n, cost, time, dp);
+    }
+};
