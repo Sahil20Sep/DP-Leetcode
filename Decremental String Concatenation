@@ -1,0 +1,51 @@
+class Solution {
+public:
+    
+    int func(int i, int start, int end, vector<string> &words, vector<vector<vector<int>>> &dp){
+        
+        int n = words.size();
+        
+        if(i == n){
+            return 0; 
+        }
+        
+        if(dp[i][start][end] != -1){
+            
+            return dp[i][start][end];
+            
+        }
+        
+        int ans = INT_MAX;
+        
+        int sz = words[i].size();
+        
+        ans = min(ans, sz + func(i + 1, start, words[i][sz - 1] - 'a', words, dp));
+        
+        ans = min(ans, sz + func(i + 1, words[i][0] - 'a', end, words, dp));
+
+        if(start == words[i][sz - 1] - 'a'){
+            
+            ans = min(ans, sz - 1 + func(i + 1, words[i][0] - 'a', end, words, dp));
+            
+        }
+        
+        if(end == words[i][0] - 'a'){
+            
+            ans = min(ans, sz - 1 + func(i + 1, start, words[i][sz - 1] - 'a', words, dp));
+        }
+        
+        return dp[i][start][end] = ans;
+    }
+    
+    int minimizeConcatenatedLength(vector<string>& words) {
+        
+        int n = words.size();
+        
+        vector<vector<vector<int>>> dp(n, vector<vector<int>> (26, vector<int> (26, -1)));
+        
+        int start = words[0][0] - 'a', end = words[0][words[0].size() - 1] - 'a';
+        
+        return words[0].size() + func(1, start, end, words, dp);
+        
+    }
+};
