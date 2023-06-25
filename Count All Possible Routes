@@ -1,0 +1,40 @@
+class Solution {
+public:
+
+    const int mod = 1e9 + 7;
+
+    int func(int start, int fuel, int finish, vector<int> &location, vector<vector<int>> &dp){
+
+        if(dp[start][fuel] != -1){
+            return dp[start][fuel];
+        }
+
+        int n = location.size();
+
+        int ans = 0;
+
+        ans += (start == finish);
+
+        for(int i = 0; i < n; i++){
+
+            if(i != start){
+
+                if(fuel - abs(location[start] - location[i]) >= 0){
+
+                    ans = (ans + func(i, fuel - abs(location[start] - location[i]), finish, location, dp)) % mod;
+                }
+            }
+        }
+
+        return dp[start][fuel] = ans;
+
+    }
+
+    int countRoutes(vector<int>& locations, int start, int finish, int fuel) {
+        
+        vector<vector<int>> dp(101, vector<int> (201, -1));
+
+        return func(start, fuel, finish, locations, dp);
+
+    }
+};
